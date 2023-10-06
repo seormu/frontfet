@@ -25,9 +25,17 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.css",
+              "src/lib/remixicon/fonts/remixicon.css",
+              "src/assets/css/style.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/lib/jquery/jquery.min.js",
+              "src/lib/bootstrap/js/bootstrap.bundle.min.js",
+              "src/lib/perfect-scrollbar/perfect-scrollbar.min.js",
+              "src/assets/js/script.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -87,12 +95,23 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.css",
+              "src/lib/remixicon/fonts/remixicon.css",
+              "src/assets/css/style.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/lib/jquery/jquery.min.js",
+              "src/lib/bootstrap/js/bootstrap.bundle.min.js",
+              "src/lib/perfect-scrollbar/perfect-scrollbar.min.js",
+              "src/assets/js/script.js"
+            ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "f378325a-27d1-4ae7-9a5c-4efc551a83d1"
   }
 }

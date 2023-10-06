@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+.celda-xs {
+    width: 33%;
+}
+
+.celda-md {
+    width: 33%;
+}
+.celda-mxl {
+    width: 33%;
+}
+
+.sidebar-header img{
+    width: auto;
+    height: 95%
+    
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
