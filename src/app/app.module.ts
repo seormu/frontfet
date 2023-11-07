@@ -14,7 +14,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { DetalleProyectoComponent } from './componentes/dashboard/detalle-proyecto/detalle-proyecto.component'
+import { DetalleProyectoComponent } from './componentes/dashboard/detalle-proyecto/detalle-proyecto.component';
+import { NotfoundComponent } from './componentes/dashboard/notfound/notfound.component';
+import { ActualizarProyectoComponent } from './componentes/dashboard/actualizar-proyecto/actualizar-proyecto.component'
 
 
 
@@ -26,7 +28,9 @@ import { DetalleProyectoComponent } from './componentes/dashboard/detalle-proyec
     HeaderComponent,
     LoginComponent,
     RegistroProyectosComponent,
-    DetalleProyectoComponent
+    DetalleProyectoComponent,
+    NotfoundComponent,
+    ActualizarProyectoComponent
   ],
   imports: [
     BrowserModule,

@@ -4,8 +4,73 @@
 <app-header></app-header>
 <div class="main main-app p-3 p-lg-4">
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <div class="mt-2">
-            <h3 class="main-title mb-0">Registro de proyectos</h3>
+        <div class="mt-2 container">
+            <div class="col-lg-12">
+                <h2 class="main-title mb-0 text-center"><span class="color-fet"><b>{{proyecto.codigo}}:
+                        </b></span><b>{{proyecto.nombreProyecto}}</b></h2>
+            </div>
+            <div class="position-relative mt-3">
+                <div class="position-absolute top-0 end-0">
+                    <h4 class="color-fet"><b>{{proyecto.programa}} - {{proyecto.anio}}</b></h4>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <h3><b>Objetivo principal:</b></h3>
+                <h4>{{proyecto.objetivoGeneral}}</h4>
+            </div>
+            
+        </div>
+    </div>
+    <div class="container">
+        <h3><b>Investigadores.</b></h3>
+        <div class="row ps-5">
+            <div class="col-lg-4 col-md-6 col-6">
+                <h3><b><li>Investigador 1:</li></b></h3>
+            </div>
+            <div class="col-lg-4 col-md-6 col-6">
+                <h4>{{proyecto.investigadorUno}}</h4>
+            </div>
+        </div>
+        <div class="row ps-5" *ngIf="proyecto.investigadorDos!=''">
+            <div class="col-lg-4 col-md-6 col-6">
+                <h3><b><li>Investigador 2:</li></b></h3>
+            </div>
+            <div class="col-lg-4 col-md-6 col-6">
+                <h4>{{proyecto.investigadorDos}}</h4>
+            </div>
+        </div>
+        <div class="row ps-5" *ngIf="proyecto.investigadorTres!=''">
+            <div class="col-lg-4 col-md-6 col-6">
+                <h3><li><b>Investigador 3:</b></li></h3>
+            </div>
+            <div class="col-lg-4 col-md-6 col-6">
+                <h4>{{proyecto.investigadorTres}}</h4>
+            </div>
+        </div>
+        <div class="row" *ngIf="proyecto.duracion!=''">
+            <div class="col-lg-4 col-md-6 col-6">
+                <h4><b>Duracion del proyecto:</b></h4>
+            </div>
+            <div class="col-lg-8 col-md-6 col-6" >
+                <h4>{{proyecto.duracion}}</h4>
+            </div>
+        </div>
+        <div class="row" *ngIf="proyecto.valorProyecto!=''">
+            <div class="col-lg-4 col-md-6 col-6">
+                <h4><b>Valor del proyecto:</b></h4>
+            </div>
+            <div class="col-lg-8 col-md-6 col-6">
+                <h4>{{proyecto.valorProyecto}}</h4>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="button" class="btn btn-success" (click)="actualizar()">
+                Actualizar proyecto 
+            </button>
+
+            <button type="button" class="btn btn-danger" (click)="eliminarProyecto(proyecto.id)">
+                 Eliminar proyecto
+            </button>
         </div>
     </div>
 </div>

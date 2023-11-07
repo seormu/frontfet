@@ -1,60 +1,71 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FORMATO_NOMBRES_APELLIDOS, SOLO_NUMEROS } from 'src/app/constantes/CaracteresEspeciales';
+import { SOLO_NUMEROS } from 'src/app/constantes/CaracteresEspeciales';
 import { VALIDACIONES_FORMULARIO_GUARDAR_PROYECTO } from 'src/app/constantes/validacionesFormulario';
 import { Programas } from 'src/app/interfaces/programas';
-import { GuardarProyecto } from 'src/app/interfaces/proyectos';
+import { GuardarProyecto, Proyecto } from 'src/app/interfaces/proyectos';
 import { ProgramasService } from 'src/app/services/programas/programas.service';
 import { ProyectosService } from 'src/app/services/proyectos/proyectos.service';
 import { ValidacionesService } from 'src/app/services/validaciones/validaciones-service.service';
 
-
-declare function perfectScrollBar(): any;
-declare function script(): any;
-
 @Component({
-  selector: 'app-registro-proyectos',
-  templateUrl: './registro-proyectos.component.html',
-  styleUrls: ['./registro-proyectos.component.css']
+  selector: 'app-actualizar-proyecto',
+  templateUrl: './actualizar-proyecto.component.html',
+  styleUrls: ['./actualizar-proyecto.component.css']
 })
-export class RegistroProyectosComponent implements OnInit {
+export class ActualizarProyectoComponent implements OnInit{
 
 
   formularioProyectos: FormGroup;
-  mensajeAlerta: string = '';
-  tipoAlerta: string = '';
-  listaProgramas: Programas[];
   pronombre: string = '';
   idPrograma: string = '';
-  nombrePrograma: string;
   anioProyecto: string = '';
+  listaProgramas: Programas[];
+  proyecto: Proyecto;
+  mensajeAlerta: string;
+  tipoAlerta: string;
+  programa: string;
   maximo: string;
 
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly validacionesService: ValidacionesService,
-    private readonly proyectosService: ProyectosService,
     private readonly programasService: ProgramasService,
+    private readonly proyectosServices: ProyectosService,
+    private readonly elementRef: ElementRef,
     private readonly router: Router,
-    private readonly elementRef: ElementRef
-  ) { }
+  ){}
 
-  ngAfterViewInit(): void {
-    perfectScrollBar();
-    script();
-  }
-
-  ngOnInit() {
+  ngOnInit(){
     this.crearFormulario();
     this.consultarProgramas();
-
+    this.proyectosServices.detalleProyecto$.subscribe((proyecto: Proyecto) => {
+      this.proyecto = proyecto;
+      this.programa = proyecto.programa;
+    })
   }
 
   consultarProgramas(): void {
     this.programasService.consultarProgramas().subscribe((programas: Programas[])=> {
       this.listaProgramas = programas;
+      this.asignarCampos();
     })
+  }
+
+  asignarCampos(): void {
+    this.formularioProyectos.get('codigo').setValue(this.proyecto.codigo);
+    this.formularioProyectos.get('programa').setValue(this.proyecto.programa);
+    this.formularioProyectos.get('nombreProyecto').setValue(this.proyecto.nombreProyecto);
+    this.formularioProyectos.get('objetivoGeneral').setValue(this.proyecto.objetivoGeneral);
+    this.formularioProyectos.get('anio').setValue(this.proyecto.anio);
+    this.formularioProyectos.get('procedencia').setValue(this.proyecto.procedencia);
+    this.formularioProyectos.get('investigadorUno').setValue(this.proyecto.investigadorUno);
+    this.formularioProyectos.get('investigadorDos').setValue(this.proyecto.investigadorDos);
+    this.formularioProyectos.get('investigadorUno').setValue(this.proyecto.investigadorUno);
+    this.formularioProyectos.get('investigadorTres').setValue(this.proyecto.investigadorTres);
+    this.formularioProyectos.get('duracion').setValue(this.proyecto.duracion);
+    this.formularioProyectos.get('valor').setValue(this.proyecto.valorProyecto);
   }
 
   crearFormulario(): void {
@@ -82,32 +93,6 @@ export class RegistroProyectosComponent implements OnInit {
     return this.validacionesService.obtenerMensajeErrorCampo(this.formularioProyectos, nombreCampo, VALIDACIONES_FORMULARIO_GUARDAR_PROYECTO)
   }
 
-  limpiarCampos(): void {
-    this.formularioProyectos.get('codigo').setValue('');
-    this.formularioProyectos.get('nombreProyecto').setValue('');
-    this.formularioProyectos.get('objetivoGeneral').setValue('');
-    this.formularioProyectos.get('programa').setValue('');
-    this.formularioProyectos.get('anio').setValue('');
-    this.formularioProyectos.get('procedencia').setValue('');
-    this.formularioProyectos.get('investigadorUno').setValue('');
-    this.formularioProyectos.get('investigadorDos').setValue('');
-    this.formularioProyectos.get('investigadorTres').setValue('');
-    this.formularioProyectos.get('duracion').setValue('');
-    this.formularioProyectos.get('valor').setValue('');  
-  }
-
-  generarAlertas(){
-    for (const key of Object.keys(this.formularioProyectos.controls)) {
-      if (this.formularioProyectos.controls[key].invalid) {
-        const invalidControl = this.elementRef.nativeElement.querySelector(
-          '[formcontrolname="' + key + '"]'
-        );
-        invalidControl.focus();
-        break;
-      }
-    }
-  }
-
   guardarProyecto(): void {
     this.generarAlertas();
     this.mensajeAlerta = '';
@@ -124,9 +109,8 @@ export class RegistroProyectosComponent implements OnInit {
         investigadorTres: this.formularioProyectos.get('investigadorTres').value,
         duracion: this.formularioProyectos.get('duracion').value,
         valorProyecto: this.formularioProyectos.get('valor').value,
-        cantidadProyectos: this.maximo
       }
-      this.proyectosService.guardarProyecto(body).subscribe((proyecto: GuardarProyecto) => {
+      this.proyectosServices.actualizarProyecto(body, this.proyecto.id).subscribe((proyecto: GuardarProyecto) => {
         this.router.navigate([''])
       }, (_) => {
         this.mensajeAlerta = `Error al guardar el proyecto ${body.codigo}`;
@@ -135,24 +119,44 @@ export class RegistroProyectosComponent implements OnInit {
     }
   }
 
+  generarAlertas(){
+    for (const key of Object.keys(this.formularioProyectos.controls)) {
+      if (this.formularioProyectos.controls[key].invalid) {
+        const invalidControl = this.elementRef.nativeElement.querySelector(
+          '[formcontrolname="' + key + '"]'
+        );
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
+
+  generarCodigo(): void{
+    this.proyectosServices.obtenerGeneradorId(this.programa).subscribe((valor: string) => {
+      this.maximo = valor;
+      const codigo = this.pronombre.concat('-').concat(this.idPrograma).concat('-').concat(this.formularioProyectos.get('anio').value).concat('-').concat(valor);
+      this.formularioProyectos.get('codigo').setValue(codigo);
+    });
+  }
+
   programaSeleccionado(evento: any){
+    let res;
+    if(evento.value == undefined){
+      res=this.programa;
+    }else{
+      res = evento.value
+    }
     for(var i=0; i<this.listaProgramas.length; i++){
-      if(evento.value == this.listaProgramas[i].carrera){
+      if(res == this.listaProgramas[i].carrera){
         this.pronombre = this.listaProgramas[i].pronombre;
         this.idPrograma = this.listaProgramas[i].id;
-        this.nombrePrograma = this.listaProgramas[i].carrera
+        this.programa = this.listaProgramas[i].carrera;
         break;
       }
     }
     this.generarCodigo();
   }
 
-  generarCodigo(): void{
-    this.proyectosService.obtenerGeneradorId(this.nombrePrograma).subscribe((valor: string) => {
-      this.maximo = valor;
-      const codigo = this.pronombre.concat('-').concat(this.idPrograma).concat('-').concat(this.formularioProyectos.get('anio').value).concat('-').concat(valor);
-      this.formularioProyectos.get('codigo').setValue(codigo);
-    });
-  }
-  
+
+
 }

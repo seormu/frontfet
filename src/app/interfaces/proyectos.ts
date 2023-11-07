@@ -11,7 +11,7 @@ export interface Proyecto {
     investigadorTres: string,
     duracion: string,
     valorProyecto: string,
-
+    cantidadProyectos: number
 }
 
 export interface GuardarProyecto {
@@ -26,4 +26,5 @@ export interface GuardarProyecto {
     investigadorTres: string,
     duracion: string,
     valorProyecto: string,
+    cantidadProyectos?: string,
 }

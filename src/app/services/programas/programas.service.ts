@@ -11,10 +11,14 @@ export class ProgramasService {
   private URL = 'http://localhost:9000';
 
   constructor(
-    private readonly Http: HttpClient
+    private readonly http: HttpClient
   ) { }
 
   consultarProgramas(): Observable<Programas[]> {
-    return this.Http.get<Programas[]>(this.URL+'/programas')
+    return this.http.get<Programas[]>(this.URL+'/programas')
+  }
+
+  consultarCantidadProgramas(): Observable<String> {
+    return this.http.get<string>(this.URL+'/programas/cantidad');
   }
 }

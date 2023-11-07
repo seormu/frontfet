@@ -1,4 +1,5 @@
 export interface Programas {
     id: string,
-    carrera: string
+    carrera: string,
+    pronombre: string
 }

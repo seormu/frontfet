@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Proyecto } from 'src/app/interfaces/proyectos';
+import { ProgramasService } from 'src/app/services/programas/programas.service';
 import { ProyectosService } from 'src/app/services/proyectos/proyectos.service';
 
 declare function perfectScrollBar(): any;
@@ -14,16 +15,33 @@ declare function script(): any;
 export class IndexComponent {
 
   listaProyectos: Proyecto[];
+  cantidadProyectos: string;
+  cantidadProgramas: string;
 
   constructor(
     private readonly proyectosService: ProyectosService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly programasService: ProgramasService
   ){}
 
   ngAfterViewInit(): void {
     perfectScrollBar();
     script();
     this.consultarProyectos();
+    this.consultarCantidadProyectos();
+    this.consultarCantidadProgramas();
+  }
+
+  consultarCantidadProyectos(): void {
+    this.proyectosService.consultarCantidadProyectos().subscribe((cantidad:string) => {
+      this.cantidadProyectos = cantidad;
+    })
+  }
+
+  consultarCantidadProgramas(): void {
+    this.programasService.consultarCantidadProgramas().subscribe((cantidad: string) => {
+      this.cantidadProgramas = cantidad;
+    })
   }
 
   consultarProyectos(): void {

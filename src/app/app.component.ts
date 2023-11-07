@@ -1,20 +1,14 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 
-declare function perfectScrollBar(): any;
-declare function script(): any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   title = 'repositorio-fet';
 
   constructor() { }
 
-  ngAfterViewInit(): void {
-    perfectScrollBar();
-    script();
-  }
 }

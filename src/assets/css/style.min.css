@@ -21410,7 +21410,12 @@ fieldset:disabled .gridjs-pages button,
 
 @media(min-width: 576px) {
     .page-sign {
-        background-color: #fbfcfe
+        height: 100vh;
+        width: 100%;
+        background-image: url('https://www.lanacion.com.co/wp-content/uploads/2019/07/FET-1024x488.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        /*background-color: #CCFDD5;*/
     }
 }
 
@@ -21606,7 +21611,7 @@ fieldset:disabled .gridjs-pages button,
     height: 100%;
     object-fit: cover;
     mix-blend-mode: luminosity;
-    opacity: .3
+    opacity: .9
 }
 
 .card-auth {

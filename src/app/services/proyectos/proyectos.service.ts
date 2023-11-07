@@ -33,11 +33,27 @@ export class ProyectosService {
     return this.http.post<GuardarProyecto>(this.URL+'guardar-proyecto',body)
   }
 
+  actualizarProyecto(body: any, id: string): Observable<GuardarProyecto>{
+    return this.http.put<GuardarProyecto>(this.URL+'actualizar/'+id,body)
+  }
+
   filtrarProyectos(filtro: string): Observable<Proyecto[]> {
     return this.http.get<Proyecto[]>(this.URL+'filtrar/'+filtro);
   }
 
   consultarProyecto(idproyecto: string): Observable<Proyecto> {
     return this.http.get<Proyecto>(this.URL+'detalle/'+idproyecto);
+  }
+
+  eliminarProyecto(id: string): Observable<void> {
+    return this.http.delete<void>(this.URL+'eliminar/'+id);
+  }
+
+  consultarCantidadProyectos(): Observable<string> {
+    return this.http.get<string>(this.URL+'cantidad-proyectos');
+  }
+
+  obtenerGeneradorId(programa: string): Observable<String>{
+    return this.http.get<string>(this.URL+'complementarid/'+programa);
   }
 }
