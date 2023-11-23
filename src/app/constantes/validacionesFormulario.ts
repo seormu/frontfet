@@ -43,5 +43,14 @@ export const VALIDACIONES_FORMULARIO_GUARDAR_PROYECTO = {
     },
     programa: {
         required: 'El campo es obligatorio'
+    },
+    fechaInicio: {
+        required: 'El campo fecha es obligatorio',
+        pattern: 'Formato de fecha DD/MM/YYYY',
+    },
+    fechaFin: {
+        required: 'El campo fecha es obligatorio',
+        pattern: 'Formato de fecha DD/MM/YYYY',
+        menos: 'La fecha fin no puede ser menor a la fecha de inicio'
     }
 }

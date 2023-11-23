@@ -47,12 +47,20 @@
                 <h4>{{proyecto.investigadorTres}}</h4>
             </div>
         </div>
-        <div class="row" *ngIf="proyecto.duracion!=''">
+        <div class="row">
             <div class="col-lg-4 col-md-6 col-6">
-                <h4><b>Duracion del proyecto:</b></h4>
+                <h4><b>Fecha de inicio del proyecto:</b></h4>
             </div>
             <div class="col-lg-8 col-md-6 col-6" >
-                <h4>{{proyecto.duracion}}</h4>
+                <h4>{{proyecto.fechaInicio}}</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-6">
+                <h4><b>Fecha fin del proyecto:</b></h4>
+            </div>
+            <div class="col-lg-8 col-md-6 col-6" >
+                <h4>{{proyecto.fechaFin}}</h4>
             </div>
         </div>
         <div class="row" *ngIf="proyecto.valorProyecto!=''">
@@ -61,6 +69,14 @@
             </div>
             <div class="col-lg-8 col-md-6 col-6">
                 <h4>{{proyecto.valorProyecto}}</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-6">
+                <h4><b>Estado del proyecto:</b></h4>
+            </div>
+            <div class="col-lg-8 col-md-6 col-6">
+                <h4>{{proyecto.estado}}</h4>
             </div>
         </div>
         <div class="text-center">

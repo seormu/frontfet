@@ -85,18 +85,38 @@
             </div>
             <div class="row mt-2">
                 <mat-form-field class="col-lg-6" appearance="outline">
-                    <mat-label>Duracion en meses</mat-label>
-                    <input matInput type="text" placeholder="Duracion en meses" formControlName="duracion" />
-                    <mat-error *ngIf="campoEsInvalido('duracion')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('duracion') }}
+                    <mat-label>Fecha inicio</mat-label>
+                    <input matInput type="text" placeholder="DD/MM/YYYY" formControlName="fechaInicio" />
+                    <mat-error *ngIf="campoEsInvalido('fechaInicio')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('fechaInicio') }}
                     </mat-error>
                 </mat-form-field>
 
+                <mat-form-field class="col-lg-6" appearance="outline">
+                    <mat-label>Fecha fin</mat-label>
+                    <input matInput type="text" placeholder="DD/MM/YYYY" formControlName="fechaFin" />
+                    <mat-error *ngIf="campoEsInvalido('fechaFin')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('fechaFin') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row mt-2">
                 <mat-form-field class="col-lg-6" appearance="outline">
                     <mat-label>Valor del proyecto</mat-label>
                     <input matInput type="text" placeholder="Valor del proyecto" formControlName="valor" />
                     <mat-error *ngIf="campoEsInvalido('valor')" class="text-danger">
                         {{ obtenerMensajeErrorCampo('valor') }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-12 col-lg-6 pe-0 pe-lg-3" appearance="outline">
+                    <mat-label>Estado</mat-label>
+                    <mat-select formControlName="estado" >
+                        <mat-option *ngFor="
+                        let item of estadosProyectos
+                      " value="{{ item.estado }}">{{ item.estado }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="campoEsInvalido('estado')">
+                        {{ obtenerMensajeErrorCampo('estado') }}
                     </mat-error>
                 </mat-form-field>
             </div>

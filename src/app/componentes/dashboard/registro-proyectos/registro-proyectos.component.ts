@@ -1,10 +1,12 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FORMATO_NOMBRES_APELLIDOS, SOLO_NUMEROS } from 'src/app/constantes/CaracteresEspeciales';
+import { FORMATO_FECHA, SOLO_NUMEROS } from 'src/app/constantes/CaracteresEspeciales';
 import { VALIDACIONES_FORMULARIO_GUARDAR_PROYECTO } from 'src/app/constantes/validacionesFormulario';
+import { EstadoProyecto } from 'src/app/interfaces/estados';
 import { Programas } from 'src/app/interfaces/programas';
 import { GuardarProyecto } from 'src/app/interfaces/proyectos';
+import { estadoProyectoMock } from 'src/app/mocks/estadoProyecto.mock';
 import { ProgramasService } from 'src/app/services/programas/programas.service';
 import { ProyectosService } from 'src/app/services/proyectos/proyectos.service';
 import { ValidacionesService } from 'src/app/services/validaciones/validaciones-service.service';
@@ -30,6 +32,7 @@ export class RegistroProyectosComponent implements OnInit {
   nombrePrograma: string;
   anioProyecto: string = '';
   maximo: string;
+  estadosProyectos: EstadoProyecto[];
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -48,7 +51,11 @@ export class RegistroProyectosComponent implements OnInit {
   ngOnInit() {
     this.crearFormulario();
     this.consultarProgramas();
+    this.consultarEstadosProyectos();
+  }
 
+  consultarEstadosProyectos(): void {
+    this.estadosProyectos = estadoProyectoMock;
   }
 
   consultarProgramas(): void {
@@ -68,8 +75,10 @@ export class RegistroProyectosComponent implements OnInit {
       investigadorUno: ['', [Validators.required, Validators.maxLength(100)]],
       investigadorDos: ['', [Validators.maxLength(100)]],
       investigadorTres: ['', [Validators.maxLength(100)]],
-      duracion: ['', [Validators.pattern(SOLO_NUMEROS), Validators.maxLength(10)]],
+      fechaInicio: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10), Validators.required]],
+      fechaFin: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10),Validators.required]],
       valor: ['', [Validators.pattern(SOLO_NUMEROS), Validators.maxLength(10)]],
+      estado: ['', [Validators.required]]
     });
     this.formularioProyectos.get('codigo').disable()
   }
@@ -92,7 +101,8 @@ export class RegistroProyectosComponent implements OnInit {
     this.formularioProyectos.get('investigadorUno').setValue('');
     this.formularioProyectos.get('investigadorDos').setValue('');
     this.formularioProyectos.get('investigadorTres').setValue('');
-    this.formularioProyectos.get('duracion').setValue('');
+    this.formularioProyectos.get('fechaInicio').setValue('');
+    this.formularioProyectos.get('fechaFin').setValue('');
     this.formularioProyectos.get('valor').setValue('');  
   }
 
@@ -122,14 +132,26 @@ export class RegistroProyectosComponent implements OnInit {
         investigadorUno: this.formularioProyectos.get('investigadorUno').value,
         investigadorDos: this.formularioProyectos.get('investigadorDos').value,
         investigadorTres: this.formularioProyectos.get('investigadorTres').value,
-        duracion: this.formularioProyectos.get('duracion').value,
+        fechaInicio: this.formularioProyectos.get('fechaInicio').value,
+        fechaFin: this.formularioProyectos.get('fechaFin').value,
+        estado: this.formularioProyectos.get('estado').value,
         valorProyecto: this.formularioProyectos.get('valor').value,
         cantidadProyectos: this.maximo
       }
-      this.proyectosService.guardarProyecto(body).subscribe((proyecto: GuardarProyecto) => {
+      this.validarFechas(body);
+      
+    }
+  }
+
+
+  validarFechas(proyecto: GuardarProyecto): void {
+    if(proyecto.fechaInicio > proyecto.fechaFin || proyecto.fechaInicio == proyecto.fechaFin){
+      this.formularioProyectos.controls['fechaFin'].setErrors({'menos': true})
+    }else{
+      this.proyectosService.guardarProyecto(proyecto).subscribe((proyecto: GuardarProyecto) => {
         this.router.navigate([''])
       }, (_) => {
-        this.mensajeAlerta = `Error al guardar el proyecto ${body.codigo}`;
+        this.mensajeAlerta = `Error al guardar el proyecto ${proyecto.codigo}`;
         this.tipoAlerta = 'text-danger'
       })
     }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { Proyecto, GuardarProyecto } from 'src/app/interfaces/proyectos';
+import { Proyecto, GuardarProyecto, ListaProyectos } from 'src/app/interfaces/proyectos';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +25,8 @@ export class ProyectosService {
     return this._detalleProyecto$.asObservable();
   }
 
-  consultarProyectos(): Observable<Proyecto[]> {
-    return this.http.get<Proyecto[]>(this.URL+'listarProyectos');
+  consultarProyectos(): Observable<ListaProyectos[]> {
+    return this.http.get<ListaProyectos[]>(this.URL+'listarProyectos');
   }
 
   guardarProyecto(body: any): Observable<GuardarProyecto>{
@@ -37,8 +37,8 @@ export class ProyectosService {
     return this.http.put<GuardarProyecto>(this.URL+'actualizar/'+id,body)
   }
 
-  filtrarProyectos(filtro: string): Observable<Proyecto[]> {
-    return this.http.get<Proyecto[]>(this.URL+'filtrar/'+filtro);
+  filtrarProyectos(filtro: string): Observable<ListaProyectos[]> {
+    return this.http.get<ListaProyectos[]>(this.URL+'filtrar/'+filtro);
   }
 
   consultarProyecto(idproyecto: string): Observable<Proyecto> {

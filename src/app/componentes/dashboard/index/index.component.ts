@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Proyecto } from 'src/app/interfaces/proyectos';
+import { ListaProyectos, Proyecto } from 'src/app/interfaces/proyectos';
 import { ProgramasService } from 'src/app/services/programas/programas.service';
 import { ProyectosService } from 'src/app/services/proyectos/proyectos.service';
 
@@ -14,7 +14,7 @@ declare function script(): any;
 })
 export class IndexComponent {
 
-  listaProyectos: Proyecto[];
+  listaProyectos: ListaProyectos[];
   cantidadProyectos: string;
   cantidadProgramas: string;
 
@@ -47,6 +47,7 @@ export class IndexComponent {
   consultarProyectos(): void {
     this.proyectosService.consultarProyectos().subscribe(listaProyectos => {
       this.listaProyectos = listaProyectos;
+      console.log(listaProyectos)
     });
   }
 
@@ -54,7 +55,7 @@ export class IndexComponent {
     if(filtro===''){
       this.consultarProyectos()
     }else{
-      this.proyectosService.filtrarProyectos(filtro).subscribe((proyectos: Proyecto[]) => {
+      this.proyectosService.filtrarProyectos(filtro).subscribe((proyectos: ListaProyectos[]) => {
         this.listaProyectos = proyectos;
       })
     }

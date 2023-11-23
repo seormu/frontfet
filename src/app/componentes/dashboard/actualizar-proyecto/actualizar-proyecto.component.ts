@@ -1,10 +1,12 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SOLO_NUMEROS } from 'src/app/constantes/CaracteresEspeciales';
+import { FORMATO_FECHA, SOLO_NUMEROS } from 'src/app/constantes/CaracteresEspeciales';
 import { VALIDACIONES_FORMULARIO_GUARDAR_PROYECTO } from 'src/app/constantes/validacionesFormulario';
+import { EstadoProyecto } from 'src/app/interfaces/estados';
 import { Programas } from 'src/app/interfaces/programas';
 import { GuardarProyecto, Proyecto } from 'src/app/interfaces/proyectos';
+import { estadoProyectoMock } from 'src/app/mocks/estadoProyecto.mock';
 import { ProgramasService } from 'src/app/services/programas/programas.service';
 import { ProyectosService } from 'src/app/services/proyectos/proyectos.service';
 import { ValidacionesService } from 'src/app/services/validaciones/validaciones-service.service';
@@ -27,6 +29,7 @@ export class ActualizarProyectoComponent implements OnInit{
   tipoAlerta: string;
   programa: string;
   maximo: string;
+  estadosProyectos: EstadoProyecto[];
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -44,6 +47,11 @@ export class ActualizarProyectoComponent implements OnInit{
       this.proyecto = proyecto;
       this.programa = proyecto.programa;
     })
+    this.consultarEstadosProyectos()
+  }
+
+  consultarEstadosProyectos(): void {
+    this.estadosProyectos = estadoProyectoMock;
   }
 
   consultarProgramas(): void {
@@ -64,7 +72,9 @@ export class ActualizarProyectoComponent implements OnInit{
     this.formularioProyectos.get('investigadorDos').setValue(this.proyecto.investigadorDos);
     this.formularioProyectos.get('investigadorUno').setValue(this.proyecto.investigadorUno);
     this.formularioProyectos.get('investigadorTres').setValue(this.proyecto.investigadorTres);
-    this.formularioProyectos.get('duracion').setValue(this.proyecto.duracion);
+    this.formularioProyectos.get('fechaInicio').setValue(this.proyecto.fechaInicio);
+    this.formularioProyectos.get('fechaFin').setValue(this.proyecto.fechaFin);
+    this.formularioProyectos.get('estado').setValue(this.proyecto.estado);
     this.formularioProyectos.get('valor').setValue(this.proyecto.valorProyecto);
   }
 
@@ -79,8 +89,10 @@ export class ActualizarProyectoComponent implements OnInit{
       investigadorUno: ['', [Validators.required, Validators.maxLength(100)]],
       investigadorDos: ['', [Validators.maxLength(100)]],
       investigadorTres: ['', [Validators.maxLength(100)]],
-      duracion: ['', [Validators.pattern(SOLO_NUMEROS), Validators.maxLength(10)]],
+      fechaInicio: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10), Validators.required]],
+      fechaFin: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10),Validators.required]],
       valor: ['', [Validators.pattern(SOLO_NUMEROS), Validators.maxLength(10)]],
+      estado: ['', [Validators.required]]
     });
     this.formularioProyectos.get('codigo').disable()
   }
@@ -107,13 +119,25 @@ export class ActualizarProyectoComponent implements OnInit{
         investigadorUno: this.formularioProyectos.get('investigadorUno').value,
         investigadorDos: this.formularioProyectos.get('investigadorDos').value,
         investigadorTres: this.formularioProyectos.get('investigadorTres').value,
-        duracion: this.formularioProyectos.get('duracion').value,
+        fechaInicio: this.formularioProyectos.get('fechaInicio').value,
+        fechaFin: this.formularioProyectos.get('fechaFin').value,
+        estado: this.formularioProyectos.get('estado').value,
         valorProyecto: this.formularioProyectos.get('valor').value,
       }
-      this.proyectosServices.actualizarProyecto(body, this.proyecto.id).subscribe((proyecto: GuardarProyecto) => {
-        this.router.navigate([''])
+      this.validarFechas(body);
+    }
+  }
+
+  validarFechas(proyecto: GuardarProyecto): void {
+    console.log("fin", this.formularioProyectos.get('fechaFin').value)
+    console.log("fechaInicio", this.formularioProyectos.get('fechaInicio').value)
+    if(proyecto.fechaInicio > proyecto.fechaFin || proyecto.fechaInicio == proyecto.fechaFin){
+      this.formularioProyectos.controls['fechaFin'].setErrors({'menos': true})
+    }else{
+      this.proyectosServices.actualizarProyecto(proyecto, this.proyecto.id).subscribe((proyecto: GuardarProyecto) => {
+        this.router.navigate([`detalle-proyecto`, this.proyecto.id])
       }, (_) => {
-        this.mensajeAlerta = `Error al guardar el proyecto ${body.codigo}`;
+        this.mensajeAlerta = `Error al guardar el proyecto ${proyecto.codigo}`;
         this.tipoAlerta = 'text-danger'
       })
     }
